@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Field Notes — AI tools, hacks & freelance life</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F3EC; --ink:#1A1811;
+    --red:#D94F30; --blue:#28467A; --mustard:#D9A732; --sage:#5C7A5E;
+    --font-display:'Fraunces',serif; --font-body:'Work Sans',sans-serif;
+    box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-body);}
+  a,button{color:inherit;font:inherit;}
+  button{background:none;border:0;cursor:pointer;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  .topbar{display:flex;justify-content:space-between;font-size:.75rem;padding:10px 0;border-bottom:1px solid var(--ink);}
+  header{padding-top:calc(10px + env(safe-area-inset-top,0px));background:var(--paper);position:relative;z-index:5;}
+  .masthead{display:flex;justify-content:space-between;align-items:center;padding:22px 0 18px;border-bottom:4px solid var(--ink);flex-wrap:wrap;gap:14px;}
+  .masthead h1{font-family:var(--font-display);font-weight:700;font-size:clamp(2.1rem,5.5vw,3.2rem);letter-spacing:-.01em;}
+  .masthead nav{display:flex;gap:20px;font-size:.88rem;flex-wrap:wrap;}
+  .masthead nav button{border-bottom:1px solid transparent;padding-bottom:2px;}
+  .masthead nav button:hover,.masthead nav button.active{border-color:var(--ink);}
+
+  .feature{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;padding:46px 0;border-bottom:1px solid var(--ink);text-align:left;}
+  .feature-tag{display:inline-block;background:var(--red);color:var(--paper);font-size:.72rem;padding:4px 10px;margin-bottom:16px;}
+  .feature h2{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;}
+  .feature p{margin-top:16px;max-width:46ch;color:#3A362C;}
+  .feature .byline{margin-top:18px;font-size:.82rem;color:#6b6555;}
+  .feature-visual{background:repeating-linear-gradient(135deg,var(--blue) 0 2px,transparent 2px 14px),var(--mustard);border:1px solid var(--ink);min-height:240px;position:relative;}
+  .feature-visual::after{content:"01";font-family:var(--font-display);font-weight:700;font-size:4.5rem;color:var(--paper);position:absolute;bottom:14px;right:18px;opacity:.85;}
+
+  .dept{padding:46px 0;border-bottom:1px solid var(--ink);}
+  .dept-head{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;}
+  .dept-num{font-family:var(--font-display);font-style:italic;font-size:1.3rem;}
+  .dept-head h3{font-family:var(--font-display);font-weight:700;font-size:1.5rem;}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .article-card{border-top:2px solid var(--ink);padding-top:12px;text-align:left;}
+  .article-card h4{font-family:var(--font-display);font-weight:600;font-size:1.1rem;line-height:1.28;margin-bottom:8px;}
+  .article-card p{font-size:.9rem;color:#3A362C;}
+  .article-card .tag{font-size:.72rem;color:var(--paper);display:inline-block;padding:2px 8px;margin-bottom:8px;}
+  .dept.ai .dept-num{color:var(--blue);} .dept.ai .tag{background:var(--blue);}
+  .dept.hacks .dept-num{color:var(--red);} .dept.hacks .tag{background:var(--red);}
+  .dept.freelance .dept-num{color:var(--sage);} .dept.freelance .tag{background:var(--sage);}
+
+  .chips{display:flex;gap:10px;flex-wrap:wrap;padding:24px 0;border-bottom:1px solid var(--ink);}
+  .chip{border:1.5px solid var(--ink);padding:7px 16px;font-size:.85rem;}
+  .chip.active{background:var(--ink);color:var(--paper);}
+
+  .sub{padding:46px 0;}
+  .sub-box{background:var(--ink);color:var(--paper);padding:36px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;}
+  .sub-box h3{font-family:var(--font-display);font-weight:700;font-size:1.4rem;max-width:18ch;}
+  .sub-box input{padding:11px 14px;border:1px solid var(--paper);background:transparent;color:var(--paper);min-width:200px;}
+  .sub-box button.go{padding:11px 18px;background:var(--red);color:var(--paper);font-weight:600;}
+
+  footer{padding:28px 0 46px;display:flex;justify-content:space-between;font-size:.78rem;color:#6b6555;flex-wrap:wrap;gap:10px;}
+
+  /* article page */
+  .article-page{max-width:680px;margin:0 auto;padding:46px 0 70px;}
+  .back{font-size:.85rem;color:var(--blue);margin-bottom:26px;display:inline-block;}
+  .article-page .tag2{font-size:.78rem;color:var(--paper);background:var(--red);padding:3px 10px;display:inline-block;margin-bottom:14px;}
+  .article-page h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.8rem,4.5vw,2.6rem);line-height:1.15;}
+  .article-page .byline{margin:16px 0 26px;font-size:.85rem;color:#6b6555;}
+  .article-page p{margin-bottom:16px;color:#2A271E;}
+
+  .about-page{max-width:620px;margin:0 auto;padding:50px 0 70px;}
+  .about-page h1{font-family:var(--font-display);font-weight:700;font-size:2.2rem;margin-bottom:20px;}
+  .about-page p{margin-bottom:16px;color:#3A362C;}
+
+  @media(max-width:760px){
+    .feature{grid-template-columns:1fr;} .cols3{grid-template-columns:1fr;}
+    .masthead{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap topbar"><span>FIELD NOTES — ISSUE NO. 14</span><span>AI · PRODUCTIVITY · FREELANCE</span></div>
+<header>
+  <div class="wrap masthead">
+    <h1><button onclick="go('home')" style="font:inherit;">Field Notes</button></h1>
+    <nav id="navlinks"></nav>
+  </div>
+</header>
+<main id="app" class="wrap"></main>
+<footer class="wrap"><span>Field Notes — a weekly on AI, productivity &amp; freelance work</span><span>Issue No. 14 · 2026</span></footer>
+
+<script>
+var posts=[
+  {id:1,dept:"ai",tag:"REVIEW",title:"Three AI writing assistants, one brief, zero mercy",excerpt:"We ran the same assignment through each and graded the output blind.",byline:"By the editors · 6 min read",body:["We gave three AI writing tools the exact same brief: a 400-word product update, written for a non-technical audience, due in an hour. No tool knew it was being compared.","The fastest tool produced the cleanest first draft, but needed the most editing to sound like a person rather than a press release. The slowest tool asked clarifying questions first — annoying under deadline, but the output needed almost no rewriting.","Our conclusion wasn't 'best tool.' It was 'best tool for this kind of task.' Match the tool to how much editing time you actually have, not to whichever one trended this month."]},
+  {id:2,dept:"ai",tag:"GUIDE",title:"Building a research assistant out of tools you already pay for",excerpt:"No new subscriptions — just better prompts and a saved workflow.",byline:"By the editors · 7 min read",body:["Most people don't need another AI subscription. They need a repeatable way to use the one they already have.","We built a three-step research routine: gather sources, summarize each in the same format, then ask for contradictions between them. Saved as a template, it turns a vague 'can you look into X' into a twenty-minute task.","The trick is consistency — same prompt shape every time, so you can trust the output without re-reading everything from scratch."]},
+  {id:3,dept:"ai",tag:"OPINION",title:"You don't need an AI agent. You need a checklist.",excerpt:"Where automation genuinely saves time, and where it just adds a layer of trust you have to verify anyway.",byline:"By the editors · 5 min read",body:["Agents promise to handle multi-step tasks end to end. In practice, most people spend more time checking the agent's work than they would have spent doing the task themselves.","A good checklist, run manually, still beats a semi-reliable agent for anything with real consequences — invoices, client emails, anything with a dollar amount attached.","Save the agents for low-stakes, high-volume busywork. Keep a human in the loop for anything you'd be embarrassed to get wrong."]},
+  {id:4,dept:"hacks",tag:"METHOD",title:"The 20-minute rule that killed my afternoon slump",excerpt:"A boring timer trick that outperformed every app we tried.",byline:"By the editors · 4 min read",body:["Nothing fancy: when focus drops after lunch, we set a timer for 20 minutes and commit to one single task, no phone, no tabs.","The limit matters more than the task. Twenty minutes is short enough that starting doesn't feel heavy, and long enough to build real momentum.","Most days, the timer runs out and we keep going anyway. That's the actual trick — the rule is just there to get you past the first five minutes."]},
+  {id:5,dept:"hacks",tag:"FIELD TEST",title:"We timed six note-taking systems. One won by a landslide.",excerpt:"Speed of capture mattered more than any feature list.",byline:"By the editors · 6 min read",body:["We tested six note apps on one metric only: how long it took to capture a thought before it slipped away.","Feature-rich tools lost every time. The winner had almost no structure — just a fast-opening blank page and a search bar.","Organization can happen later. If capture takes more than a few seconds, the thought is already gone by the time you've picked a folder."]},
+  {id:6,dept:"hacks",tag:"MINDSET",title:"Your inbox is not a to-do list. Stop treating it like one.",excerpt:"A three-step triage that takes ten minutes a day.",byline:"By the editors · 5 min read",body:["Every email sitting unread is a tiny unmade decision. Multiply that by two hundred and it's no wonder inboxes feel heavy.","Our triage: delete or archive anything that needs no action, reply in under two minutes to anything quick, and move everything else into an actual task list with its own deadline.","The inbox's only job becomes 'deliver messages.' The deciding happens somewhere else, on purpose."]},
+  {id:7,dept:"freelance",tag:"MONEY",title:"How to price your first project without guessing",excerpt:"A simple framework that holds up from your first client to your fiftieth.",byline:"By the editors · 8 min read",body:["New freelancers usually price from anxiety — picking a number low enough that rejection feels unlikely.","Instead, start from your real hourly cost: living expenses plus taxes plus unpaid time spent on admin and finding clients, divided by billable hours you can realistically sustain. That number is your floor, not your goal.","Quote project-based prices built on top of that floor, not hourly ones. It rewards getting faster instead of punishing it."]},
+  {id:8,dept:"freelance",tag:"CLIENTS",title:"The email that ends scope creep before it starts",excerpt:"Copy-paste language that sets the boundary without sounding difficult.",byline:"By the editors · 4 min read",body:["Scope creep rarely arrives as one big ask. It's usually five small 'just one more things.'","We now add one line to every project kickoff email: what's included, what counts as a revision, and what happens if the brief changes after we start.","Clients don't push back on this nearly as often as new freelancers expect. Most people appreciate knowing the boundary exists."]},
+  {id:9,dept:"freelance",tag:"SYSTEMS",title:"Running a one-person studio on four tools, total",excerpt:"Invoicing, contracts, scheduling, and files — nothing fancier than it needs to be.",byline:"By the editors · 6 min read",body:["More tools usually means more tabs, not more output. We cut our freelance stack down to four: one for invoicing, one for contracts, one shared calendar, one folder system for files.","Each tool does exactly one job. None of them talk to each other, and that's fine — the overhead of 'integrating everything' was costing more time than it saved.","If a new tool doesn't replace two old ones, it doesn't make the cut."]}
+];
+var depts=[["ai","AI Tools","I."],["hacks","Productivity Hacks","II."],["freelance","Freelancing","III."]];
+var current={view:"home",id:null,filter:"all"};
+
+function go(view,id){current={view:view,id:id,filter:"all"};window.scrollTo(0,0);render();}
+function filterTo(d){current.filter=d;render();}
+
+function navlinks(){
+  var el=document.getElementById("navlinks");
+  el.innerHTML=["home:Home","about:About"].map(function(x){
+    var p=x.split(":");return '<button onclick="go(\''+p[0]+'\')" class="'+(current.view==p[0]?"active":"")+'">'+p[1]+"</button>";
+  }).join("");
+}
+
+function card(p){
+  return '<button class="article-card" onclick="go(\'article\','+p.id+')"><span class="tag">'+p.tag+'</span><h4>'+p.title+'</h4><p>'+p.excerpt+'</p></button>';
+}
+
+function renderHome(){
+  var feat=posts[0];
+  var chips=['all'].concat(depts.map(function(d){return d[0]}));
+  var chipLabels={all:"All",ai:"AI Tools",hacks:"Hacks",freelance:"Freelance"};
+  var html='';
+  html+='<section class="feature"><div><span class="feature-tag">COVER STORY</span><h2>'+feat.title+'</h2><p>'+feat.excerpt+'</p><div class="byline">'+feat.byline+'</div></div><div class="feature-visual"></div></section>';
+  html+='<div class="chips">'+chips.map(function(c){return '<button class="chip '+(current.filter==c?"active":"")+'" onclick="filterTo(\''+c+'\')">'+chipLabels[c]+'</button>'}).join("")+'</div>';
+  depts.forEach(function(d){
+    if(current.filter!=="all" && current.filter!==d[0])return;
+    var items=posts.filter(function(p){return p.dept==d[0]});
+    html+='<section class="dept '+d[0]+'"><div class="dept-head"><span class="dept-num">'+d[2]+'</span><h3>'+d[1]+'</h3></div><div class="cols3">'+items.map(card).join("")+'</div></section>';
+  });
+  html+='<section class="sub"><div class="sub-box"><div><h3>One issue, every Friday.</h3></div><form onsubmit="event.preventDefault();this.querySelector(\'button\').textContent=\'Subscribed\';"><input type="email" placeholder="you@email.com" required><button class="go" type="submit">Subscribe</button></form></div></section>';
+  document.getElementById("app").innerHTML=html;
+}
+
+function renderArticle(id){
+  var p=posts.filter(function(x){return x.id==id})[0];
+  if(!p){go("home");return;}
+  document.getElementById("app").innerHTML=
+    '<article class="article-page"><button class="back" onclick="go(\'home\')">&larr; Back to Field Notes</button>'+
+    '<span class="tag2">'+p.tag+'</span><h1>'+p.title+'</h1><div class="byline">'+p.byline+'</div>'+
+    p.body.map(function(t){return '<p>'+t+'</p>'}).join("")+
+    '</article>';
+}
+
+function renderAbout(){
+  document.getElementById("app").innerHTML=
+    '<section class="about-page"><h1>About Field Notes</h1>'+
+    '<p>Field Notes is a weekly dispatch on AI tools, productivity habits, and freelance work — written for people who want fewer tabs open, not more.</p>'+
+    '<p>Every issue covers three departments: AI Tools, Productivity Hacks, and Freelancing, plus the occasional essay that doesn\'t fit any category neatly.</p>'+
+    '<p>No growth-hacking, no affiliate links disguised as advice. If something didn\'t work for us, we say so.</p></section>';
+}
+
+function render(){
+  navlinks();
+  if(current.view=="article")renderArticle(current.id);
+  else if(current.view=="about")renderAbout();
+  else renderHome();
+}
+render();
+</script>
+</body>
+</html>
